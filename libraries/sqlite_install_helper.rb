@@ -4,6 +4,8 @@
 module SqliteInstall
   # This module implements helpers that are used for resources
   module Helper
+    BASE_NAME = 'sqlite'
+
     def path_to_download_directory(given_directory)
       return given_directory if given_directory
 
@@ -11,16 +13,16 @@ module SqliteInstall
       return '/var/chef/cache'
     end
 
-    def path_to_download_file(given_path, version)
-      directory = path_to_download_directory(given_path)
-      return File.join(directory, "sqlite-#{version}")
+    def path_to_download_file(given_directory, version)
+      directory = path_to_download_directory(given_directory)
+      return File.join(directory, "#{BASE_NAME}-#{version}")
     end
 
     def download_url(year, version)
       return "https://www.sqlite.org/#{year}/sqlite-src-#{version}.zip"
     end
 
-    def download_archive(year, version, given_download_dir)
+    def download_archive(given_download_dir, year, version)
       download_file = path_to_download_file(given_download_dir, version)
       remote_file download_file do
         source download_url(year, version)
@@ -28,15 +30,15 @@ module SqliteInstall
       return download_file
     end
 
-    def path_to_build_directory(given_path, version)
-      return given_path if given_path
+    def path_to_build_directory(given_directory, version)
+      return given_directory if given_directory
 
       directory '/var/chef/cache'
-      return "/var/chef/cache/sqlite-#{version}"
+      return "/var/chef/cache/#{BASE_NAME}-#{version}"
     end
 
     def extract_archive(new_resource, build_directory, version)
-      download_archive(new_resource.year, version, new_resource.download_directory)
+      download_file = download_archive(new_resource.download_directory, new_resource.year, version)
       poise_archive download_file do
         destination build_directory
         user new_resource.owner
@@ -44,8 +46,16 @@ module SqliteInstall
       end
     end
 
+    def path_to_install_directory(given_directory, version)
+      return given_directory if given_directory
+
+      directory "/opt/#{BASE_NAME}"
+      directory "/opt/#{BASE_NAME}/#{version}"
+      return "/opt/#{BASE_NAME}/#{version}"
+    end
+
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def build_configure_code(install_directory)
+    def create_config_code(install_directory)
       code = './configure'
       code += " --prefix=#{install_directory}"
       code += " --exec-prefix=#{install_directory}"
@@ -64,42 +74,58 @@ module SqliteInstall
       code += ' --disable-tcl' unless node['platform_family'] == 'debian'
       return code
     end
+
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-    def configure_build(install_directory, build_directory)
-      code = build_configure_code(install_directory)
-
-      bash 'Configure SQLite' do
+    def configure_build(build_directory, install_directory)
+      code = create_config_code(install_directory)
+      bash 'Configure Build' do
         code code
         cwd build_directory
         creates File.join(build_directory, 'Makefile')
       end
     end
 
-    def compile_and_install(version, build_directory)
-      checksum_file 'SQLite Source Checksum' do
+    def check_build_directory(build_directory, version)
+      checksum_file 'Source Checksum' do
         source_path build_directory
-        target_path "/var/chef/cache/sqlite-#{version}-checksum"
+        target_path "/var/chef/cache/#{BASE_NAME}-#{version}-checksum"
       end
-      bash 'Compile and Install SQLite' do
+    end
+
+    def manage_bin_file(bin_file)
+      file bin_file do
+        action :nothing
+        subscribes :delete, 'checksum_file[Source Checksum]', :immediate
+      end
+    end
+
+    def make_build(build_directory, bin_file)
+      bash 'Compile and Install' do
         code 'make && make install'
         cwd build_directory
-        # creates File.join(sqlite_lib_directory, 'libsqlite3.so')
-        subscribes :run, 'checksum_file[SQLite Source Checksum]', :immediate
+        creates bin_file
       end
     end
 
-    def build_binary(version, install_directory, build_directory)
-      configure_build(install_directory, build_directory)
-
-      compile_and_install(version, build_directory)
+    def compile_and_install(build_directory, install_directory, version)
+      check_build_directory(build_directory, version)
+      bin_file = File.join(install_directory, 'lib/libsqlite3.so')
+      manage_bin_file(bin_file)
+      make_build(build_directory, bin_file)
     end
 
-    def create_sqlite_install(new_resource)
+    def build_binary(build_directory, given_install_directory, version)
+      install_directory = path_to_install_directory(given_install_directory, version)
+      configure_build(build_directory, install_directory)
+      compile_and_install(build_directory, install_directory, version)
+    end
+
+    def create_install(new_resource)
       version = new_resource.version
       build_directory = path_to_build_directory(new_resource.build_directory, version)
       extract_archive(new_resource, build_directory, version)
-      build_binary(version, new_resource.install_directory, build_directory)
+      build_binary(build_directory, new_resource.install_directory, version)
     end
   end
 end

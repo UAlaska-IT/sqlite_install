@@ -9,6 +9,7 @@ module SqliteInstall
     def path_to_download_directory(given_directory)
       return given_directory if given_directory
 
+      directory '/var/chef'
       directory '/var/chef/cache'
       return '/var/chef/cache'
     end
@@ -33,6 +34,7 @@ module SqliteInstall
     def path_to_build_directory(given_directory, version)
       return given_directory if given_directory
 
+      directory '/var/chef'
       directory '/var/chef/cache'
       return "/var/chef/cache/#{BASE_NAME}-#{version}"
     end

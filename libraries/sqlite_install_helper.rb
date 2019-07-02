@@ -4,9 +4,10 @@
 module SqliteInstall
   # This module implements helpers that are used for resources
   module Helper
-    def path_to_download_directory(given_download_dir)
-      return given_download_dir if given_download_dir
+    def path_to_download_directory(given_directory)
+      return given_directory if given_directory
 
+      directory '/var/chef/cache'
       return '/var/chef/cache'
     end
 
@@ -15,48 +16,35 @@ module SqliteInstall
       return File.join(directory, "sqlite-#{version}")
     end
 
-    def sqlite_download_url(year, version)
+    def download_url(year, version)
       return "https://www.sqlite.org/#{year}/sqlite-src-#{version}.zip"
     end
 
-    def download_archive(year, version, given_download_dir, given_build_dir)
-      directory '/var/chef/cache' do
-        not_if { given_download_dir && given_build_dir }
-      end
-
+    def download_archive(year, version, given_download_dir)
       download_file = path_to_download_file(given_download_dir, version)
-
       remote_file download_file do
-        source sqlite_download_url(year, version)
+        source download_url(year, version)
       end
+      return download_file
     end
 
     def path_to_build_directory(given_path, version)
       return given_path if given_path
 
+      directory '/var/chef/cache'
       return "/var/chef/cache/sqlite-#{version}"
     end
 
-    def create_build_directory(given_path, version)
-      build_directory = path_to_build_directory(given_path, version)
-
-      directory build_directory do
-        not_if { given_path }
-      end
-
-      return build_directory
-    end
-
-    def extract_archive(given_build_dir)
-      build_directory = create_build_directory(given_build_dir, version)
-
+    def extract_archive(new_resource, build_directory, version)
+      download_archive(new_resource.year, version, new_resource.download_directory)
       poise_archive download_file do
         destination build_directory
+        user new_resource.owner
+        group new_resource.group
       end
-
-      return build_directory
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def build_configure_code(install_directory)
       code = './configure'
       code += " --prefix=#{install_directory}"
@@ -76,6 +64,7 @@ module SqliteInstall
       code += ' --disable-tcl' unless node['platform_family'] == 'debian'
       return code
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def configure_build(install_directory, build_directory)
       code = build_configure_code(install_directory)
@@ -107,16 +96,10 @@ module SqliteInstall
     end
 
     def create_sqlite_install(new_resource)
-      download_archive(
-        new_resource.year,
-        new_resource.version,
-        new_resource.download_directory,
-        new_resource.build_directory
-      )
-
-      build_directory = extract_archive(new_resource.build_directory)
-
-      build_binary(new_resource.version, new_resource.install_directory, build_directory)
+      version = new_resource.version
+      build_directory = path_to_build_directory(new_resource.build_directory, version)
+      extract_archive(new_resource, build_directory, version)
+      build_binary(version, new_resource.install_directory, build_directory)
     end
   end
 end

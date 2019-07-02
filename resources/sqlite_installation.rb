@@ -14,7 +14,7 @@ property :owner, String, default: 'root'
 property :group, String, default: 'root'
 
 action :create do
-  create_sqlite_install(@new_resource)
+  create_install(@new_resource)
 end
 
 action_class do

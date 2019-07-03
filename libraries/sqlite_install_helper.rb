@@ -104,6 +104,7 @@ module SqliteInstall
     def manage_bin_file(bin_file)
       file bin_file do
         action :nothing
+        manage_symlink_source false
         subscribes :delete, 'checksum_file[Source Checksum]', :immediate
       end
     end

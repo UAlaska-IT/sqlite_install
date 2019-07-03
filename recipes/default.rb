@@ -15,5 +15,6 @@ package 'gcc'
 package 'g++' if node['platform_family'] == 'debian'
 package 'gcc-c++' unless node['platform_family'] == 'debian'
 package 'make'
+package 'unzip'
 
 package "tcl-#{dev}"

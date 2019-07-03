@@ -37,20 +37,17 @@ module SqliteInstall
       return download_file
     end
 
-    def path_to_build_directory(given_directory)
-      return given_directory if given_directory
+    def path_to_build_directory(given_directory, version)
+      base = "#{BASE_NAME}-src-#{version}"
+      return File.join(given_directory, base) if given_directory
 
       directory '/var/chef'
       directory '/var/chef/cache'
-      return '/var/chef/cache'
-    end
-
-    def path_to_source_directory(build_directory)
-      return File.join(build_directory, "#{BASE_NAME}-src-#{version}")
+      return File.join('/var/chef/cache', base)
     end
 
     def clear_source_directory(build_directory, user, group)
-      dir = path_to_source_directory(build_directory)
+      dir = build_directory
       bash 'Clear Archive' do
         code "rm -rf #{dir}\nmkdir #{dir}\nchmod #{user} #{dir}\nchgrp #{group} #{dir}"
         # Run as root so we blow it away if the owner changes
@@ -69,12 +66,12 @@ module SqliteInstall
 
     def extract_download(download_file, build_directory, user, group)
       # Built-in archive_file requires Chef 15 and poise_archive is failing to exhibit idempotence on zip files
-      dir = path_to_source_directory(build_directory)
+      parent = File.dirname(build_directory)
       bash 'Extract Archive' do
-        code "unzip -q #{download_file}\nchmod -R #{user} #{dir}\nchgrp -R #{group} #{dir}"
-        cwd build_directory
+        code "unzip -q #{download_file}\nchmod -R #{user} #{build_directory}\nchgrp -R #{group} #{build_directory}"
+        cwd parent
         # Run as root in case it is installing in repo without write access
-        creates File.join(dir, 'README.md')
+        creates File.join(build_directory, 'README.md')
       end
     end
 
@@ -117,19 +114,18 @@ module SqliteInstall
 
     def configure_build(build_directory, install_directory, user, group)
       code = create_config_code(install_directory)
-      dir = path_to_source_directory(build_directory)
       bash 'Configure Build' do
         code code
-        cwd dir
+        cwd build_directory
         user user
         group group
-        creates File.join(dir, 'Makefile')
+        creates File.join(build_directory, 'Makefile')
       end
     end
 
     def check_build_directory(build_directory, version)
       checksum_file 'Source Checksum' do
-        source_path path_to_source_directory(build_directory)
+        source_path build_directory
         target_path "/var/chef/cache/#{BASE_NAME}-#{version}-src-checksum"
       end
     end
@@ -145,7 +141,7 @@ module SqliteInstall
     def make_build(build_directory, bin_file, user, group)
       bash 'Compile and Install' do
         code 'make && make install'
-        cwd path_to_source_directory(build_directory)
+        cwd build_directory
         user user
         group group
         creates bin_file
@@ -169,7 +165,7 @@ module SqliteInstall
       user = new_resource.owner
       group = new_resource.group
       version = new_resource.version
-      build_directory = path_to_build_directory(new_resource.build_directory)
+      build_directory = path_to_build_directory(new_resource.build_directory, version)
       extract_archive(new_resource, build_directory, user, group, version)
       build_binary(build_directory, new_resource.install_directory, user, group, version)
     end

@@ -67,8 +67,9 @@ module SqliteInstall
     def extract_download(download_file, build_directory, user, group)
       # Built-in archive_file requires Chef 15 and poise_archive is failing to exhibit idempotence on zip files
       parent = File.dirname(build_directory)
+      code = "unzip -q #{download_file}\nchown -R #{user} #{build_directory}\nchgrp -R #{group} #{build_directory}"
       bash 'Extract Archive' do
-        code "unzip -q #{download_file}\nchmod -R #{user} #{build_directory}\nchgrp -R #{group} #{build_directory}"
+        code code
         cwd parent
         # Run as root in case it is installing in repo without write access
         creates File.join(build_directory, 'README.md')

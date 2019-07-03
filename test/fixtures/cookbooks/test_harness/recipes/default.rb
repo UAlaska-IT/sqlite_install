@@ -14,7 +14,7 @@ user 'bud'
 
 sqlite_installation 'No Defaults' do
   year '2018'
-  version '3.26.0'
+  version '3260000'
   download_directory '/usr/local/sqlite-dl'
   build_directory '/usr/local/sqlite-bld'
   install_directory '/usr/local/sqlite'

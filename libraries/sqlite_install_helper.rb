@@ -5,6 +5,7 @@ module SqliteInstall
   # This module implements helpers that are used for resources
   module Helper
     BASE_NAME = 'sqlite'
+    BIN_CREATES_FILE = 'lib/libsqlite3.so'
 
     def archive_file_name(version)
       return "#{BASE_NAME}-src-#{version}.zip"
@@ -219,7 +220,7 @@ module SqliteInstall
 
     def compile_and_install(build_directory, install_directory, user, group, version)
       check_build_directory(build_directory, version)
-      bin_file = File.join(install_directory, 'lib/libsqlite3.so')
+      bin_file = File.join(install_directory, BIN_CREATES_FILE)
       manage_bin_file(bin_file)
       make_build(build_directory, install_directory, bin_file, user, group)
     end

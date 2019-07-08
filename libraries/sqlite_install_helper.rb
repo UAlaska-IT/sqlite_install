@@ -71,7 +71,7 @@ module SqliteInstall
       bash 'Extract Archive' do
         code code
         cwd parent
-        # Run as root in case it is installing in repo without write access
+        # Run as root in case it is installing in directory without write access
         creates File.join(build_directory, 'README.md')
       end
     end
@@ -139,9 +139,9 @@ module SqliteInstall
       end
     end
 
-    def make_build(build_directory, bin_file, user, group)
-      bash 'Compile and Install' do
-        code 'make && make install'
+    def execute_build(build_directory, bin_file, user, group)
+      bash 'Compile' do
+        code 'make'
         cwd build_directory
         user user
         group group
@@ -149,11 +149,53 @@ module SqliteInstall
       end
     end
 
+    def execute_install(build_directory, bin_file)
+      bash 'Install' do
+        code 'make install'
+        cwd build_directory
+        # Run as root in case it is installing in directory without write access
+        creates bin_file
+      end
+    end
+
+    def recurse_command(path)
+      return ' -R' if File.directory?(path)
+
+      return ''
+    end
+
+    def build_permission_command(install_directory, user, group)
+      command = ''
+      Dir.foreach(install_directory) do |filename|
+        next if ['.', '..'].include?(filename)
+
+        path = File.join(install_directory, filename)
+        recurse = recurse_command(path)
+        command += "\nchown#{recurse} #{user} #{path}\nchgrp#{recurse} #{group} #{path}"
+      end
+      return command
+    end
+
+    def set_install_permissions(install_directory, user, group)
+      command = build_permission_command(install_directory, user, group)
+      bash 'Change Install Permissions' do
+        code command
+        action :nothing
+        subscribes :run, 'bash[Compile and Install]', :immediate
+      end
+    end
+
+    def make_build(build_directory, install_directory, bin_file, user, group)
+      execute_build(build_directory, bin_file, user, group)
+      execute_install(build_directory, bin_file)
+      set_install_permissions(install_directory, user, group)
+    end
+
     def compile_and_install(build_directory, install_directory, user, group, version)
       check_build_directory(build_directory, version)
       bin_file = File.join(install_directory, 'lib/libsqlite3.so')
       manage_bin_file(bin_file)
-      make_build(build_directory, bin_file, user, group)
+      make_build(build_directory, install_directory, bin_file, user, group)
     end
 
     def build_binary(build_directory, given_install_directory, user, group, version)

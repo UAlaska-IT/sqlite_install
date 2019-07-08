@@ -64,10 +64,27 @@ module SqliteInstall
       clear_source_directory(build_directory, user, group)
     end
 
+    def extract_command(filename)
+      return 'unzip -q' if filename.match?(/\.zip/)
+
+      return 'tar xzf' if filename.match?(/\.tar\.gzip/)
+
+      raise "Archive not supported: #{filename}"
+    end
+
+    def code_for_extraction(download_file, build_directory, user, group)
+      code = <<~CODE
+        #{extract_command(download_file)} #{download_file}
+        chown -R #{user} #{build_directory}
+        chgrp -R #{group} #{build_directory}
+      CODE
+      return code
+    end
+
     def extract_download(download_file, build_directory, user, group)
       # Built-in archive_file requires Chef 15 and poise_archive is failing to exhibit idempotence on zip files
       parent = File.dirname(build_directory)
-      code = "unzip -q #{download_file}\nchown -R #{user} #{build_directory}\nchgrp -R #{group} #{build_directory}"
+      code = code_for_extraction(download_file, build_directory, user, group)
       bash 'Extract Archive' do
         code code
         cwd parent
@@ -165,6 +182,12 @@ module SqliteInstall
       return ''
     end
 
+    def command_for_file(install_directory, user, group, filename)
+      path = File.join(install_directory, filename)
+      recurse = recurse_command(path)
+      return "\nchown#{recurse} #{user} #{path}\nchgrp#{recurse} #{group} #{path}"
+    end
+
     def build_permission_command(install_directory, user, group)
       command = ''
       ruby_block 'Build Children' do
@@ -172,9 +195,7 @@ module SqliteInstall
           Dir.foreach(install_directory) do |filename|
             next if ['.', '..'].include?(filename)
 
-            path = File.join(install_directory, filename)
-            recurse = recurse_command(path)
-            command += "\nchown#{recurse} #{user} #{path}\nchgrp#{recurse} #{group} #{path}"
+            command += command_for_file(install_directory, user, group, filename)
           end
         end
       end

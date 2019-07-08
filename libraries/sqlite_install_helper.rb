@@ -19,6 +19,29 @@ module SqliteInstall
       return "#{BASE_NAME}-src-#{version}"
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def create_config_code(install_directory, _new_resource)
+      code = './configure'
+      code += " --prefix=#{install_directory}"
+      code += " --exec-prefix=#{install_directory}"
+      code += ' --enable-memsys5'
+      code += ' --enable-memsys3'
+      code += ' --enable-fts3'
+      code += ' --enable-fts4'
+      code += ' --enable-fts5'
+      code += ' --enable-json1'
+      code += ' --enable-update-limit'
+      code += ' --enable-geopoly'
+      code += ' --enable-rtree'
+      code += ' --enable-session'
+      code += ' --enable-gcov'
+      # Having troubles linking TCL library
+      code += ' --disable-tcl' unless node['platform_family'] == 'debian'
+      return code
+    end
+
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
     def path_to_download_directory(given_directory)
       return given_directory if given_directory
 
@@ -112,29 +135,6 @@ module SqliteInstall
       directory dir
       return dir
     end
-
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def create_config_code(install_directory, _new_resource)
-      code = './configure'
-      code += " --prefix=#{install_directory}"
-      code += " --exec-prefix=#{install_directory}"
-      code += ' --enable-memsys5'
-      code += ' --enable-memsys3'
-      code += ' --enable-fts3'
-      code += ' --enable-fts4'
-      code += ' --enable-fts5'
-      code += ' --enable-json1'
-      code += ' --enable-update-limit'
-      code += ' --enable-geopoly'
-      code += ' --enable-rtree'
-      code += ' --enable-session'
-      code += ' --enable-gcov'
-      # Having troubles linking TCL library
-      code += ' --disable-tcl' unless node['platform_family'] == 'debian'
-      return code
-    end
-
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def configure_build(build_directory, install_directory, user, group, new_resource)
       code = create_config_code(install_directory, new_resource)

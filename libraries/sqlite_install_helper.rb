@@ -86,8 +86,9 @@ module SqliteInstall
       return given_directory if given_directory
 
       directory "/opt/#{BASE_NAME}"
-      directory "/opt/#{BASE_NAME}/#{version}"
-      return "/opt/#{BASE_NAME}/#{version}"
+      dir = "/opt/#{BASE_NAME}/#{version}"
+      directory dir
+      return dir
     end
 
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -166,12 +167,16 @@ module SqliteInstall
 
     def build_permission_command(install_directory, user, group)
       command = ''
-      Dir.foreach(install_directory) do |filename|
-        next if ['.', '..'].include?(filename)
+      ruby_block 'Build Children' do
+        block do
+          Dir.foreach(install_directory) do |filename|
+            next if ['.', '..'].include?(filename)
 
-        path = File.join(install_directory, filename)
-        recurse = recurse_command(path)
-        command += "\nchown#{recurse} #{user} #{path}\nchgrp#{recurse} #{group} #{path}"
+            path = File.join(install_directory, filename)
+            recurse = recurse_command(path)
+            command += "\nchown#{recurse} #{user} #{path}\nchgrp#{recurse} #{group} #{path}"
+          end
+        end
       end
       return command
     end

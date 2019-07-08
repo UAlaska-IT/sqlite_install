@@ -110,7 +110,7 @@ module SqliteInstall
     end
 
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def create_config_code(install_directory)
+    def create_config_code(install_directory, _new_resource)
       code = './configure'
       code += " --prefix=#{install_directory}"
       code += " --exec-prefix=#{install_directory}"
@@ -132,8 +132,8 @@ module SqliteInstall
 
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-    def configure_build(build_directory, install_directory, user, group)
-      code = create_config_code(install_directory)
+    def configure_build(build_directory, install_directory, user, group, new_resource)
+      code = create_config_code(install_directory, new_resource)
       bash 'Configure Build' do
         code code
         cwd build_directory
@@ -227,7 +227,7 @@ module SqliteInstall
 
     def build_binary(build_directory, user, group, version, new_resource)
       install_directory = path_to_install_directory(new_resource.install_directory, version)
-      configure_build(build_directory, install_directory, user, group)
+      configure_build(build_directory, install_directory, user, group, new_resource)
       compile_and_install(build_directory, install_directory, user, group, version)
     end
 

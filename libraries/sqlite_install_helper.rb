@@ -15,6 +15,10 @@ module SqliteInstall
       return "https://www.sqlite.org/#{year}/#{archive_file_name(version)}"
     end
 
+    def archive_root_directory(version)
+      return "#{BASE_NAME}-src-#{version}"
+    end
+
     def path_to_download_directory(given_directory)
       return given_directory if given_directory
 
@@ -39,7 +43,7 @@ module SqliteInstall
     end
 
     def path_to_build_directory(given_directory, version)
-      base = "#{BASE_NAME}-src-#{version}"
+      base = archive_root_directory(version)
       return File.join(given_directory, base) if given_directory
 
       directory '/var/chef'

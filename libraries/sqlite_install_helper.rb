@@ -210,19 +210,29 @@ module SqliteInstall
       return command
     end
 
-    def set_install_permissions(install_directory, user, group)
+    # Some install scripts create artifacts in the source directory
+    def set_src_permissions(build_directory, user, group)
+      bash 'Set Config Permissions' do
+        code "chown -R #{user} #{build_directory}\nchgrp -R #{group} #{build_directory}"
+        action :nothing
+        subscribes :run, 'bash[Install]', :immediate
+      end
+    end
+
+    def set_install_permissions(build_directory, install_directory, user, group)
       command = build_permission_command(install_directory, user, group)
       bash 'Change Install Permissions' do
         code command
         action :nothing
-        subscribes :run, 'bash[Compile and Install]', :immediate
+        subscribes :run, 'bash[Install]', :immediate
       end
+      set_src_permissions(build_directory, user, group)
     end
 
     def make_build(build_directory, install_directory, bin_file, user, group)
       execute_build(build_directory, bin_file, user, group)
       execute_install(build_directory, bin_file)
-      set_install_permissions(install_directory, user, group)
+      set_install_permissions(build_directory, install_directory, user, group)
     end
 
     def compile_and_install(build_directory, install_directory, user, group, version)

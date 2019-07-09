@@ -114,3 +114,35 @@ describe file('/usr/local/sqlite-bld/sqlite-src-3260000') do
   it { should be_owned_by 'bud' }
   it { should be_grouped_into 'bud' }
 end
+
+describe file('/var/chef/cache/sqlite-3280000-dl-checksum') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file('/var/chef/cache/sqlite-3260000-dl-checksum') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file('/var/chef/cache/sqlite-3280000-src-checksum') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file('/var/chef/cache/sqlite-3260000-src-checksum') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end

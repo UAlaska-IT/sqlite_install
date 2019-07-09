@@ -5,6 +5,7 @@ module SqliteInstall
   # This module implements helpers that are used for resources
   module Helper
     BASE_NAME = 'sqlite'
+    EXTRACT_CREATES_FILE = 'README.md'
     BIN_CREATES_FILE = 'lib/libsqlite3.so'
 
     def archive_file_name(version)
@@ -119,7 +120,7 @@ module SqliteInstall
         code code
         cwd parent
         # Run as root in case it is installing in directory without write access
-        creates File.join(build_directory, 'README.md')
+        creates File.join(build_directory, EXTRACT_CREATES_FILE)
       end
     end
 

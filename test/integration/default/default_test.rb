@@ -196,3 +196,19 @@ describe file('/usr/local/sqlite-bld/sqlite-src-3260000/Makefile') do
 end
 
 # TODO: Tests for config entries
+
+describe file('/opt/sqlite/3280000/lib/libsqlite3.so') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file('/usr/local/sqlite/lib/libsqlite3.so') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'bud' }
+  it { should be_grouped_into 'bud' }
+end

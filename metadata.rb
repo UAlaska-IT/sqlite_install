@@ -26,4 +26,5 @@ supports 'suse'
 chef_version '>= 14.0' if respond_to?(:chef_version)
 
 depends 'checksum_file'
+depends 'chef_run_recorder'
 depends 'poise-archive'

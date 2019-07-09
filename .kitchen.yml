@@ -54,6 +54,7 @@ platforms:
 suites:
   - name: debian-based
     run_list:
+      - recipe[chef_run_recorder::default]
       - recipe[test_harness::default]
     verifier:
       inspec_tests:
@@ -67,6 +68,7 @@ suites:
       - debian-8
   - name: rhel-based
     run_list:
+      - recipe[chef_run_recorder::default]
       - recipe[test_harness::default]
     verifier:
       inspec_tests:
@@ -81,6 +83,7 @@ suites:
       - fedora-28
   - name: all-others
     run_list:
+      - recipe[chef_run_recorder::default]
       - recipe[test_harness::default]
     verifier:
       inspec_tests:

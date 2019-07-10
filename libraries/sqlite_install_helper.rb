@@ -196,18 +196,24 @@ module SqliteInstall
       return "\nchown#{recurse} #{user} #{path}\nchgrp#{recurse} #{group} #{path}"
     end
 
-    def build_permission_command(install_directory, user, group)
+    def iterate_install_directory(install_directory, user, group)
       command = ''
-      ruby_block 'Build Children' do
-        block do
-          Dir.foreach(install_directory) do |filename|
-            next if ['.', '..'].include?(filename)
+      Dir.foreach(install_directory) do |filename|
+        next if ['.', '..'].include?(filename)
 
-            command += command_for_file(install_directory, user, group, filename)
-          end
-        end
+        command += command_for_file(install_directory, user, group, filename)
       end
       return command
+    end
+
+    def build_permission_command(install_directory, user, group)
+      ruby_block 'Build Children' do
+        block do
+          node.run_state['build_permission_command'] = iterate_install_directory(install_directory, user, group)
+        end
+        action :nothing
+        subscribes :run, 'bash[Install]', :immediate
+      end
     end
 
     # Some install scripts create artifacts in the source directory
@@ -220,9 +226,10 @@ module SqliteInstall
     end
 
     def set_install_permissions(build_directory, install_directory, user, group)
-      command = build_permission_command(install_directory, user, group)
+      build_permission_command(install_directory, user, group)
       bash 'Change Install Permissions' do
-        code command
+        code(lazy { node.run_state['build_permission_command'] })
+        cwd install_directory
         action :nothing
         subscribes :run, 'bash[Install]', :immediate
       end

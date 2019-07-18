@@ -62,7 +62,7 @@ describe user('bud') do
   its('group') { should eq 'bud' }
   its('groups') { should eq ['bud'] }
   its('home') { should eq '/home/bud' }
-  its('shell') { should eq '/bin/sh' }
+  its('shell') { should eq '/bin/bash' }
 end
 
 # Begin white-box testing of resources

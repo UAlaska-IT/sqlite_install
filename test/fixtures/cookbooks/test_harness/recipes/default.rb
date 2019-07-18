@@ -10,7 +10,9 @@ directory '/usr/local/sqlite-bld'
 
 directory '/usr/local/sqlite'
 
-user 'bud'
+user 'bud' do
+  shell '/bin/bash'
+end
 
 sqlite_installation 'No Defaults' do
   year '2018'

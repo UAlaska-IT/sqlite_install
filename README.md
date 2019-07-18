@@ -7,6 +7,7 @@ __Maintainer: OIT Systems Engineering__ (<ua-oit-se@alaska.edu>)
 
 ## Purpose
 
+This cookbook provides a single resource that downloads, configures, compiles, and installs SQLite.
 
 ## Requirements
 
@@ -36,7 +37,7 @@ Platforms validated via Test Kitchen:
 
 Notes:
 
-* This cookbook should support any recent Windows or Linux variant.
+* This cookbook should support any recent Linux variant.
 
 ### Dependencies
 

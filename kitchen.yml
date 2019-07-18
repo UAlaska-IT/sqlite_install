@@ -15,7 +15,7 @@ provisioner:
   name: chef_zero
   always_update_cookbooks: true
   product_name: chef
-  product_version: 15.0.300
+  product_version: 15.1.36
   install_strategy: always
 
 verifier:
@@ -26,7 +26,6 @@ platforms:
   - name: ubuntu-16.04
   - name: ubuntu-14.04
   - name: debian-9
-  - name: debian-8
   - name: centos-7
   - name: centos-6
   - name: oracle-7.6
@@ -65,7 +64,6 @@ suites:
       - ubuntu-16.04
       - ubuntu-14.04
       - debian-9
-      - debian-8
   - name: rhel-based
     run_list:
       - recipe[chef_run_recorder::default]

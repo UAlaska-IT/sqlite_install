@@ -51,6 +51,51 @@ This cookbook provides one resource for creating an SQLite installation.
 
 ### sqlite_installation
 
+This resource provides a single action to create an SQLite installation.
+
+__Actions__
+
+One action is provided.
+
+* `:create` - Post condition is that source and binary artifacts exist in specified directories.
+
+__Attributes__
+
+* `year` - Defaults to `'2019'`.
+The release year of SQLite to install.
+Needed to build the download URL.
+* `version` - Defaults to `'3280000'`.
+The version of SQLite to install.
+Note the 'dotless' format.
+* `download_directory` - Defaults to `nil`.
+The local path to the directory into which to download the source archive.
+See note below about paths.
+* `build_directory` - Defaults to `nil`.
+The local path to the directory into which to decompress and build the source code.
+See note below about paths.
+* `install_directory` - Defaults to `nil`.
+The local path to the directory into which to install the binary artifacts.
+See note below about paths.
+* `owner` - Defaults to `root`.
+The owner of all artifacts.
+* `group` - Defaults to `root`.
+The group of all artifacts.
+
+__Note on paths__
+
+If a path is set for download, build or install, then the client must assure the directory exists before the resource runs.
+The resource runs as root and sets permissions on any created files, so is capable of placing a user-owned directory in a root-owned directory.
+
+Fairly standard defaults are used for paths.
+If download_directory or build_directory is nil (default), '/var/chef/cache' will be used.
+If install directory is nil (default), "/opt/sqlite/#{version}" will be created and used.
+
+For build_directory, the path given is the _parent_ of the source root that is created when the archive is extracted.
+For example, if build_directory is set to '/usr/local/sqlite-src', then the source root will be "/usr/local/sqlite-src/sqlite-src-#{version}".
+
+For install_directory, the path given is the root of the install.
+For example, if install_directory is set to '/usr/local/sqlite', then the path to the SQLite shared library will be '/usr/local/sqlite/lib/libsqlite3.so'.
+The lib path must be added to linker and runtime configurations (typically use -L and rpath, respectively) for dependents to load the custom libraries.
 
 ## Recipes
 

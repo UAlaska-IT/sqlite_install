@@ -212,3 +212,31 @@ describe file('/usr/local/sqlite/lib/libsqlite3.so') do
   it { should be_owned_by 'bud' }
   it { should be_grouped_into 'bud' }
 end
+
+describe file('/opt/sqlite/3280000/bin/sqlite3') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file('/usr/local/sqlite/bin/sqlite3') do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'bud' }
+  it { should be_grouped_into 'bud' }
+end
+
+describe bash('/opt/sqlite/3280000/bin/sqlite3 -version') do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+  its(:stdout) { should match(/3\.28\.0 2019/) }
+end
+
+describe bash('/usr/local/sqlite/bin/sqlite3 -version') do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+  its(:stdout) { should match(/3.26.0 2018/) }
+end

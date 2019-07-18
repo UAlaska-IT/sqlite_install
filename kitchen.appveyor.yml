@@ -45,6 +45,7 @@ platforms:
 suites:
   - name: default
     run_list:
+      - recipe[chef_run_recorder::default]
       - recipe[test_harness::default]
     verifier:
       inspec_tests:

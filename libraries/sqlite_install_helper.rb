@@ -43,9 +43,7 @@ module SqliteInstall
 
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-    def path_to_download_directory(given_directory)
-      return given_directory if given_directory
-
+    def create_default_directories
       directory '/var/chef' do
         mode 0o755
         owner 'root'
@@ -56,6 +54,12 @@ module SqliteInstall
         owner 'root'
         group 'root'
       end
+    end
+
+    def path_to_download_directory(given_directory)
+      return given_directory if given_directory
+
+      create_default_directories
       return '/var/chef/cache'
     end
 
@@ -80,16 +84,7 @@ module SqliteInstall
       base = archive_root_directory(version)
       return File.join(given_directory, base) if given_directory
 
-      directory '/var/chef' do
-        mode 0o755
-        owner 'root'
-        group 'root'
-      end
-      directory '/var/chef/cache' do
-        mode 0o755
-        owner 'root'
-        group 'root'
-      end
+      create_default_directories
       return File.join('/var/chef/cache', base)
     end
 
@@ -146,21 +141,28 @@ module SqliteInstall
       extract_download(download_file, build_directory, user, group)
     end
 
-    def path_to_install_directory(given_directory, version)
-      return given_directory if given_directory
+    def default_install_directory(version)
+      return "/opt/#{BASE_NAME}/#{version}"
+    end
 
+    def create_opt_directories(version)
       directory "/opt/#{BASE_NAME}" do
         mode 0o755
         owner 'root'
         group 'root'
       end
-      dir = "/opt/#{BASE_NAME}/#{version}"
-      directory dir do
+      directory default_install_directory(version) do
         mode 0o755
         owner 'root'
         group 'root'
       end
-      return dir
+    end
+
+    def path_to_install_directory(given_directory, version)
+      return given_directory if given_directory
+
+      create_opt_directories(version)
+      return default_install_directory(version)
     end
 
     def configure_build(build_directory, install_directory, user, group, new_resource)

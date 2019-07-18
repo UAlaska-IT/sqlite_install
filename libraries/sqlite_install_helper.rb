@@ -48,9 +48,13 @@ module SqliteInstall
 
       directory '/var/chef' do
         mode 0o755
+        owner 'root'
+        group 'root'
       end
       directory '/var/chef/cache' do
         mode 0o755
+        owner 'root'
+        group 'root'
       end
       return '/var/chef/cache'
     end
@@ -78,9 +82,13 @@ module SqliteInstall
 
       directory '/var/chef' do
         mode 0o755
+        owner 'root'
+        group 'root'
       end
       directory '/var/chef/cache' do
         mode 0o755
+        owner 'root'
+        group 'root'
       end
       return File.join('/var/chef/cache', base)
     end
@@ -143,10 +151,14 @@ module SqliteInstall
 
       directory "/opt/#{BASE_NAME}" do
         mode 0o755
+        owner 'root'
+        group 'root'
       end
       dir = "/opt/#{BASE_NAME}/#{version}"
       directory dir do
         mode 0o755
+        owner 'root'
+        group 'root'
       end
       return dir
     end

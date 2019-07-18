@@ -61,6 +61,15 @@ This cookbook provides no recipes.
 Custom resources can be used as below.
 
 ```ruby
+sqlite_installation 'No Defaults' do
+  year '2018'
+  version '3260000'
+  download_directory '/usr/local/sqlite-dl'
+  build_directory '/usr/local/sqlite-bld'
+  install_directory '/usr/local/sqlite'
+  owner 'some-dudette'
+  group 'some-dudettes'
+end
 ```
 
 ## Development

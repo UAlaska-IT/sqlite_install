@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/ualaska-it/sqlite_install.svg)](https://github.com/ualaska-it/sqlite_install)
 [![GitHub Tag](https://img.shields.io/github/tag/ualaska-it/sqlite_install.svg)](https://github.com/ualaska-it/sqlite_install)
+[![Build status](https://ci.appveyor.com/api/projects/status/0u5dex788uq995rc/branch/master?svg=true)](https://ci.appveyor.com/project/UAlaska/sqlite-install/branch/master)
 
 __Maintainer: OIT Systems Engineering__ (<ua-oit-se@alaska.edu>)
 

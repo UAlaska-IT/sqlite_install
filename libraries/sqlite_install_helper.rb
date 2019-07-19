@@ -177,14 +177,35 @@ module SqliteInstall
       return default_install_directory(new_resource)
     end
 
+    def save_config(code, new_resource)
+      file 'Config File' do
+        path "/var/chef/cache/#{base_name(new_resource).downcase}-#{new_resource.version}-config"
+        content code
+        mode 0o644
+        owner 'root'
+        group 'root'
+      end
+    end
+
+    def manage_make_file(build_directory, code, new_resource)
+      save_config(code, new_resource)
+      makefile = File.join(build_directory, 'Makefile')
+      file makefile do
+        action :nothing
+        subscribes :delete, 'file[Config File]', :immediate
+      end
+      return makefile
+    end
+
     def configure_build(build_directory, install_directory, new_resource)
       code = create_config_code(install_directory, new_resource)
+      makefile = manage_make_file(build_directory, code, new_resource)
       bash 'Configure Build' do
         code code
         cwd build_directory
         user new_resource.owner
         group new_resource.group
-        creates File.join(build_directory, 'Makefile')
+        creates makefile
       end
     end
 

@@ -9,6 +9,9 @@ dev =
     'devel'
   end
 
+curr_ver = '3280000'
+prev_ver = '3260000'
+
 describe package('gcc') do
   it { should be_installed }
 end
@@ -83,7 +86,7 @@ describe file('/var/chef/cache') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/var/chef/cache/sqlite-src-3280000.zip') do
+describe file("/var/chef/cache/sqlite-src-#{curr_ver}.zip") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -91,7 +94,7 @@ describe file('/var/chef/cache/sqlite-src-3280000.zip') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/usr/local/sqlite-dl/sqlite-src-3260000.zip') do
+describe file("/usr/local/sqlite-dl/sqlite-src-#{prev_ver}.zip") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -99,7 +102,7 @@ describe file('/usr/local/sqlite-dl/sqlite-src-3260000.zip') do
   it { should be_grouped_into 'bud' }
 end
 
-describe file('/var/chef/cache/sqlite-src-3280000') do
+describe file("/var/chef/cache/sqlite-src-#{curr_ver}") do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -107,7 +110,7 @@ describe file('/var/chef/cache/sqlite-src-3280000') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/usr/local/sqlite-bld/sqlite-src-3260000') do
+describe file("/usr/local/sqlite-bld/sqlite-src-#{prev_ver}") do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -115,7 +118,7 @@ describe file('/usr/local/sqlite-bld/sqlite-src-3260000') do
   it { should be_grouped_into 'bud' }
 end
 
-describe file('/var/chef/cache/sqlite-3280000-dl-checksum') do
+describe file("/var/chef/cache/sqlite-#{curr_ver}-dl-checksum") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -123,7 +126,7 @@ describe file('/var/chef/cache/sqlite-3280000-dl-checksum') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/var/chef/cache/sqlite-3260000-dl-checksum') do
+describe file("/var/chef/cache/sqlite-#{prev_ver}-dl-checksum") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -131,7 +134,7 @@ describe file('/var/chef/cache/sqlite-3260000-dl-checksum') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/var/chef/cache/sqlite-3280000-src-checksum') do
+describe file("/var/chef/cache/sqlite-#{curr_ver}-src-checksum") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -139,7 +142,7 @@ describe file('/var/chef/cache/sqlite-3280000-src-checksum') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/var/chef/cache/sqlite-3260000-src-checksum') do
+describe file("/var/chef/cache/sqlite-#{prev_ver}-src-checksum") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -147,7 +150,7 @@ describe file('/var/chef/cache/sqlite-3260000-src-checksum') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/var/chef/cache/sqlite-src-3280000/README.md') do
+describe file("/var/chef/cache/sqlite-src-#{curr_ver}/README.md") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -155,7 +158,7 @@ describe file('/var/chef/cache/sqlite-src-3280000/README.md') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/usr/local/sqlite-bld/sqlite-src-3260000/README.md') do
+describe file("/usr/local/sqlite-bld/sqlite-src-#{prev_ver}/README.md") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -163,7 +166,7 @@ describe file('/usr/local/sqlite-bld/sqlite-src-3260000/README.md') do
   it { should be_grouped_into 'bud' }
 end
 
-describe file('/opt/sqlite/3280000') do
+describe file("/opt/sqlite/#{curr_ver}") do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -179,7 +182,7 @@ describe file('/usr/local/sqlite') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/var/chef/cache/sqlite-src-3280000/Makefile') do
+describe file("/var/chef/cache/sqlite-src-#{curr_ver}/Makefile") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -187,7 +190,7 @@ describe file('/var/chef/cache/sqlite-src-3280000/Makefile') do
   it { should be_grouped_into 'root' }
 end
 
-describe file('/usr/local/sqlite-bld/sqlite-src-3260000/Makefile') do
+describe file("/usr/local/sqlite-bld/sqlite-src-#{prev_ver}/Makefile") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -197,7 +200,7 @@ end
 
 # TODO: Tests for config entries
 
-describe file('/opt/sqlite/3280000/lib/libsqlite3.so') do
+describe file("/opt/sqlite/#{curr_ver}/lib/libsqlite3.so") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o755 }
@@ -213,7 +216,7 @@ describe file('/usr/local/sqlite/lib/libsqlite3.so') do
   it { should be_grouped_into 'bud' }
 end
 
-describe file('/opt/sqlite/3280000/bin/sqlite3') do
+describe file("/opt/sqlite/#{curr_ver}/bin/sqlite3") do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o755 }
@@ -229,7 +232,7 @@ describe file('/usr/local/sqlite/bin/sqlite3') do
   it { should be_grouped_into 'bud' }
 end
 
-describe bash('/opt/sqlite/3280000/bin/sqlite3 -version') do
+describe bash("/opt/sqlite/#{curr_ver}/bin/sqlite3 -version") do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
   its(:stdout) { should match(/3\.28\.0 2019/) }

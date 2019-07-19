@@ -241,5 +241,5 @@ end
 describe bash('/usr/local/sqlite/bin/sqlite3 -version') do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
-  its(:stdout) { should match(/3.26.0 2018/) }
+  its(:stdout) { should match(/3\.26\.0 2018/) }
 end

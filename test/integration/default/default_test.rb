@@ -9,16 +9,16 @@ dev =
     'devel'
   end
 
-base_name = 'sqlite'
-curr_ver = '3280000'
-prev_ver = '3260000'
+$BASE_NAME = 'sqlite'
+$CURR_VER = '3280000'
+$PREV_VER = '3260000'
 
 def archive_file(version)
-  return "#{base_name}-src-#{version}.zip"
+  return "#{$BASE_NAME}-src-#{version}.zip"
 end
 
 def source_dir(version)
-  return "#{base_name}-src-#{version}"
+  return "#{$BASE_NAME}-src-#{version}"
 end
 
 describe package 'gcc' do
@@ -45,7 +45,7 @@ describe package "tcl-#{dev}" do
   it { should be_installed }
 end
 
-describe file "/usr/local/#{base_name}-dl" do
+describe file "/usr/local/#{$BASE_NAME}-dl" do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -53,7 +53,7 @@ describe file "/usr/local/#{base_name}-dl" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}-bld" do
+describe file "/usr/local/#{$BASE_NAME}-bld" do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -61,7 +61,7 @@ describe file "/usr/local/#{base_name}-bld" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}" do
+describe file "/usr/local/#{$BASE_NAME}" do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -95,7 +95,7 @@ describe file '/var/chef/cache' do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/var/chef/cache/#{archive_file(curr_ver)}" do
+describe file "/var/chef/cache/#{archive_file($CURR_VER)}" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -103,71 +103,7 @@ describe file "/var/chef/cache/#{archive_file(curr_ver)}" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}-dl/#{archive_file(prev_ver)}" do
-  it { should exist }
-  it { should be_file }
-  it { should be_mode 0o644 }
-  it { should be_owned_by 'bud' }
-  it { should be_grouped_into 'bud' }
-end
-
-describe file "/var/chef/cache/#{source_dir(curr_ver)}" do
-  it { should exist }
-  it { should be_directory }
-  it { should be_mode 0o755 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/usr/local/#{base_name}-bld/#{source_dir(prev_ver)}" do
-  it { should exist }
-  it { should be_directory }
-  it { should be_mode 0o755 }
-  it { should be_owned_by 'bud' }
-  it { should be_grouped_into 'bud' }
-end
-
-describe file "/var/chef/cache/#{base_name}-#{curr_ver}-dl-checksum" do
-  it { should exist }
-  it { should be_file }
-  it { should be_mode 0o644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/var/chef/cache/#{base_name}-#{prev_ver}-dl-checksum" do
-  it { should exist }
-  it { should be_file }
-  it { should be_mode 0o644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/var/chef/cache/#{base_name}-#{curr_ver}-src-checksum" do
-  it { should exist }
-  it { should be_file }
-  it { should be_mode 0o644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/var/chef/cache/#{base_name}-#{prev_ver}-src-checksum" do
-  it { should exist }
-  it { should be_file }
-  it { should be_mode 0o644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/var/chef/cache/#{source_dir(curr_ver)}/README.md" do
-  it { should exist }
-  it { should be_file }
-  it { should be_mode 0o644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/usr/local/#{base_name}-bld/#{source_dir(prev_ver)}/README.md" do
+describe file "/usr/local/#{$BASE_NAME}-dl/#{archive_file($PREV_VER)}" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -175,7 +111,7 @@ describe file "/usr/local/#{base_name}-bld/#{source_dir(prev_ver)}/README.md" do
   it { should be_grouped_into 'bud' }
 end
 
-describe file "/opt/#{base_name}" do
+describe file "/var/chef/cache/#{source_dir($CURR_VER)}" do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
@@ -183,23 +119,15 @@ describe file "/opt/#{base_name}" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/opt/#{base_name}/#{curr_ver}" do
+describe file "/usr/local/#{$BASE_NAME}-bld/#{source_dir($PREV_VER)}" do
   it { should exist }
   it { should be_directory }
   it { should be_mode 0o755 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
+  it { should be_owned_by 'bud' }
+  it { should be_grouped_into 'bud' }
 end
 
-describe file "/usr/local/#{base_name}" do
-  it { should exist }
-  it { should be_directory }
-  it { should be_mode 0o755 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
-end
-
-describe file "/var/chef/cache/#{source_dir(curr_ver)}/Makefile" do
+describe file "/var/chef/cache/#{$BASE_NAME}-#{$CURR_VER}-dl-checksum" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -207,7 +135,79 @@ describe file "/var/chef/cache/#{source_dir(curr_ver)}/Makefile" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}-bld/#{source_dir(prev_ver)}/Makefile" do
+describe file "/var/chef/cache/#{$BASE_NAME}-#{$PREV_VER}-dl-checksum" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/var/chef/cache/#{$BASE_NAME}-#{$CURR_VER}-src-checksum" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/var/chef/cache/#{$BASE_NAME}-#{$PREV_VER}-src-checksum" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/var/chef/cache/#{source_dir($CURR_VER)}/README.md" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/usr/local/#{$BASE_NAME}-bld/#{source_dir($PREV_VER)}/README.md" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'bud' }
+  it { should be_grouped_into 'bud' }
+end
+
+describe file "/opt/#{$BASE_NAME}" do
+  it { should exist }
+  it { should be_directory }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/opt/#{$BASE_NAME}/#{$CURR_VER}" do
+  it { should exist }
+  it { should be_directory }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/usr/local/#{$BASE_NAME}" do
+  it { should exist }
+  it { should be_directory }
+  it { should be_mode 0o755 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/var/chef/cache/#{source_dir($CURR_VER)}/Makefile" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file "/usr/local/#{$BASE_NAME}-bld/#{source_dir($PREV_VER)}/Makefile" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -217,7 +217,7 @@ end
 
 # TODO: Tests for config entries
 
-describe file "/opt/#{base_name}/#{curr_ver}/include/#{base_name}/#{base_name}conf.h" do
+describe file "/opt/#{$BASE_NAME}/#{$CURR_VER}/include/#{$BASE_NAME}/#{$BASE_NAME}3.h" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -225,7 +225,7 @@ describe file "/opt/#{base_name}/#{curr_ver}/include/#{base_name}/#{base_name}co
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}/include/#{base_name}/#{base_name}conf.h" do
+describe file "/usr/local/#{$BASE_NAME}/include/#{$BASE_NAME}/#{$BASE_NAME}3.h" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o644 }
@@ -233,7 +233,7 @@ describe file "/usr/local/#{base_name}/include/#{base_name}/#{base_name}conf.h" 
   it { should be_grouped_into 'root' }
 end
 
-describe file "/opt/#{base_name}/#{curr_ver}/lib/libsqlite3.so" do
+describe file "/opt/#{$BASE_NAME}/#{$CURR_VER}/lib/libsqlite3.so" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o755 }
@@ -241,7 +241,7 @@ describe file "/opt/#{base_name}/#{curr_ver}/lib/libsqlite3.so" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}/lib/libsqlite3.so" do
+describe file "/usr/local/#{$BASE_NAME}/lib/libsqlite3.so" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o755 }
@@ -249,7 +249,7 @@ describe file "/usr/local/#{base_name}/lib/libsqlite3.so" do
   it { should be_grouped_into 'bud' }
 end
 
-describe file "/opt/#{base_name}/#{curr_ver}/bin/#{base_name}3" do
+describe file "/opt/#{$BASE_NAME}/#{$CURR_VER}/bin/#{$BASE_NAME}3" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o755 }
@@ -257,7 +257,7 @@ describe file "/opt/#{base_name}/#{curr_ver}/bin/#{base_name}3" do
   it { should be_grouped_into 'root' }
 end
 
-describe file "/usr/local/#{base_name}/bin/#{base_name}" do
+describe file "/usr/local/#{$BASE_NAME}/bin/#{$BASE_NAME}" do
   it { should exist }
   it { should be_file }
   it { should be_mode 0o755 }
@@ -265,13 +265,13 @@ describe file "/usr/local/#{base_name}/bin/#{base_name}" do
   it { should be_grouped_into 'bud' }
 end
 
-describe bash "/opt/#{base_name}/#{curr_ver}/bin/#{base_name} -version" do
+describe bash "/opt/#{$BASE_NAME}/#{$CURR_VER}/bin/#{$BASE_NAME}3 -version" do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
   its(:stdout) { should match(/3\.28\.0 2019/) }
 end
 
-describe bash "/usr/local/#{base_name}/bin/#{base_name} -version" do
+describe bash "/usr/local/#{$BASE_NAME}/bin/#{$BASE_NAME}3 -version" do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
   its(:stdout) { should match(/3\.26\.0 2018/) }

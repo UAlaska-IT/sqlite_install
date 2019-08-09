@@ -24,7 +24,7 @@ module SqliteInstall
     end
 
     def download_base_url(new_resource)
-      return "https://www.sqlite.org/#{new_resource.year}/#{archive_file_name(new_resource)}"
+      return "https://www.sqlite.org/#{new_resource.year}"
     end
 
     def archive_root_directory(new_resource)

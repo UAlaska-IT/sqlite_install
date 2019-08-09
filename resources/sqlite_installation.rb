@@ -18,5 +18,5 @@ action :create do
 end
 
 action_class do
-  include SqliteInstall::Helper
+  include SqliteInstall::Install
 end

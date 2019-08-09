@@ -2,8 +2,17 @@
 
 # This module implements helpers that are used for resources
 module SqliteInstall
+  # This module exposes helpers to the client
+  module Public
+  end
+  # This module implements custom logic for this installer
+  def Custom
+  end
+  # This module implements hooks into the base install
+  def Hook
+  end
   # This module implements helpers that are used for resources
-  module Helper
+  module Install
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def create_config_code(install_directory, _new_resource)
       code = './configure'

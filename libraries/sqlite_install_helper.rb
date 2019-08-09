@@ -15,6 +15,10 @@ module SqliteInstall
   module Install
     # Hooks for install
 
+    def base_name(_new_resource)
+      return 'sqlite'
+    end
+
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def configuration_command(install_directory, _new_resource)
       code = './configure'
@@ -37,10 +41,6 @@ module SqliteInstall
     end
 
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
-
-    def base_name(_new_resource)
-      return 'sqlite'
-    end
 
     def extract_creates_file(_new_resource)
       return 'README.md'

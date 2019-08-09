@@ -66,7 +66,7 @@ module SqliteInstall
       return 'make install'
     end
 
-    def post_build_logic(_install_directory, _new_resource)
+    def post_install_logic(_install_directory, _new_resource)
       # Call custom logic here
     end
 

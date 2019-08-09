@@ -16,7 +16,7 @@ module SqliteInstall
     # Hooks for install
 
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def create_config_code(install_directory, _new_resource)
+    def configuration_command(install_directory, _new_resource)
       code = './configure'
       code += " --prefix=#{install_directory}"
       code += " --exec-prefix=#{install_directory}"
@@ -50,7 +50,7 @@ module SqliteInstall
       return "#{base_name(new_resource)}-src-#{new_resource.version}.zip"
     end
 
-    def download_url(new_resource)
+    def download_base_url(new_resource)
       return "https://www.sqlite.org/#{new_resource.year}/#{archive_file_name(new_resource)}"
     end
 
@@ -58,7 +58,7 @@ module SqliteInstall
       return "#{base_name(new_resource)}-src-#{new_resource.version}"
     end
 
-    def bin_creates_file(_new_resource)
+    def install_creates_file(_new_resource)
       return 'lib/libsqlite3.so'
     end
 

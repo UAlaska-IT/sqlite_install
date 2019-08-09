@@ -36,10 +36,10 @@ module SqliteInstall
     end
 
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def configuration_command(install_directory, _new_resource)
+    def configuration_command(new_resource)
       code = './configure'
-      code += " --prefix=#{install_directory}"
-      code += " --exec-prefix=#{install_directory}"
+      code += " --prefix=#{new_resource.install_directory}"
+      code += " --exec-prefix=#{new_resource.install_directory}"
       code += ' --enable-memsys5'
       code += ' --enable-memsys3'
       code += ' --enable-fts3'
@@ -66,7 +66,7 @@ module SqliteInstall
       return 'make install'
     end
 
-    def post_install_logic(_install_directory, _new_resource)
+    def post_install_logic(_new_resource)
       # Call custom logic here
     end
 

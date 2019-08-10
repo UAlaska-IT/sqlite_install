@@ -13,12 +13,6 @@ module SqliteInstall
       return "opt/sqlite/#{default_sqlite_version}"
     end
   end
-  # This module implements custom logic for this installer
-  def Custom
-  end
-  # This module implements hooks into the base install
-  def Hook
-  end
   # This module implements helpers that are used for resources
   module Install
     # Hooks for install

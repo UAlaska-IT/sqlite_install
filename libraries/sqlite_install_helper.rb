@@ -85,3 +85,7 @@ module SqliteInstall
     # For common install code see base_install cookbook
   end
 end
+
+Chef::Provider.include(SqliteInstall::Public)
+Chef::Recipe.include(SqliteInstall::Public)
+Chef::Resource.include(SqliteInstall::Public)

@@ -4,6 +4,14 @@
 module SqliteInstall
   # This module exposes helpers to the client
   module Public
+    def default_sqlite_version
+      return '3290000'
+    end
+
+    def default_sqlite_directory
+      # Must match base_install
+      return "opt/sqlite/#{default_sqlite_version}"
+    end
   end
   # This module implements custom logic for this installer
   def Custom
@@ -17,6 +25,10 @@ module SqliteInstall
 
     def base_name(_new_resource)
       return 'sqlite'
+    end
+
+    def default_version(_new_resource)
+      return default_sqlite_version
     end
 
     def archive_file_name(new_resource)

@@ -10,7 +10,7 @@ dev =
   end
 
 BASE_NAME = 'sqlite'
-CURR_VER = '3280000'
+CURR_VER = '3290000'
 PREV_VER = '3260000'
 
 def archive_file(version)

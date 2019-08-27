@@ -25,4 +25,4 @@ supports 'suse'
 
 chef_version '>= 14.0' if respond_to?(:chef_version)
 
-depends 'checksum_file'
+depends 'source_install'

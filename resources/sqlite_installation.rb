@@ -6,7 +6,7 @@ provides :sqlite_installation
 default_action :create
 
 property :year, String, default: '2019'
-property :version, String, default: '3280000'
+property :version, [String, nil], default: nil
 property :download_directory, [String, nil], default: nil
 property :build_directory, [String, nil], default: nil
 property :install_directory, [String, nil], default: nil
@@ -18,5 +18,5 @@ action :create do
 end
 
 action_class do
-  include SqliteInstall::Helper
+  include SqliteInstall::Install
 end

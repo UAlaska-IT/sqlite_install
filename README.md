@@ -64,9 +64,11 @@ __Attributes__
 * `year` - Defaults to `'2019'`.
 The release year of SQLite to install.
 Needed to build the download URL.
-* `version` - Defaults to `'3280000'`.
+* `version` - Defaults to `nil`.
 The version of SQLite to install.
-Note the 'dotless' format.
+Note that SQLite uses a 'dotless' format, e.g. '3290000'.
+If nil, will default to the latest version when this cookbook was updated.
+The helper `default_sqlite_version` is provided for fetching this value.
 * `download_directory` - Defaults to `nil`.
 The local path to the directory into which to download the source archive.
 See note below about paths.
@@ -112,8 +114,8 @@ sqlite_installation 'No Defaults' do
   download_directory '/usr/local/sqlite-dl'
   build_directory '/usr/local/sqlite-bld'
   install_directory '/usr/local/sqlite'
-  owner 'some-dudette'
-  group 'some-dudettes'
+  owner 'some-dude'
+  group 'some-dudes'
 end
 ```
 

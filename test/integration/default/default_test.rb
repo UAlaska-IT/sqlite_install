@@ -10,7 +10,7 @@ dev =
   end
 
 BASE_NAME = 'sqlite'
-CURR_VER = '3280000'
+CURR_VER = '3290000'
 PREV_VER = '3260000'
 
 def archive_file(version)
@@ -268,7 +268,7 @@ end
 describe bash "/opt/#{BASE_NAME}/#{CURR_VER}/bin/#{BASE_NAME}3 -version" do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
-  its(:stdout) { should match(/3\.28\.0 2019/) }
+  its(:stdout) { should match(/3\.29\.0 2019/) }
 end
 
 describe bash "/usr/local/#{BASE_NAME}/bin/#{BASE_NAME}3 -version" do

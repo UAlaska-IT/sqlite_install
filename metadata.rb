@@ -11,7 +11,7 @@ git_url = 'https://github.com/ualaska-it/sqlite_install'
 source_url git_url if respond_to?(:source_url)
 issues_url "#{git_url}/issues" if respond_to?(:issues_url)
 
-version '1.0.0'
+version '1.1.0'
 
 supports 'ubuntu', '>= 14.0'
 supports 'debian', '>= 8.0'
@@ -25,4 +25,4 @@ supports 'suse'
 
 chef_version '>= 14.0' if respond_to?(:chef_version)
 
-depends 'checksum_file'
+depends 'source_install'

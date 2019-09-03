@@ -1,5 +1,9 @@
 # Changelog for SQLite Install Cookbook
 
+## 1.1.1
+
+* Fixed absolute default path
+
 ## 1.1.0
 
 * Added helpers for default version and path

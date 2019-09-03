@@ -12,7 +12,7 @@ module SqliteInstall
 
     def default_sqlite_directory
       # Must match source_install
-      return "opt/sqlite/#{default_sqlite_version}"
+      return "/opt/sqlite/#{default_sqlite_version}"
     end
   end
 

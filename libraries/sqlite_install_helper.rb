@@ -77,11 +77,7 @@ module SqliteInstall
       return 'make install'
     end
 
-    def post_install_logic(_new_resource)
-      # Call custom logic here
-    end
-
-    # For common install code see source_install cookbook
+    # For optional hooks and common install code see source_install cookbook
   end
 end
 

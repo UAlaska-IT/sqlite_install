@@ -78,6 +78,10 @@ module SqliteInstall
     end
 
     # For optional hooks and common install code see source_install cookbook
+
+    def config_creates_file(_new_resource)
+      return 'Makefile'
+    end
   end
 end
 

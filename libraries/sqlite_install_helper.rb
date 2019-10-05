@@ -7,7 +7,7 @@ module SqliteInstall
   # This module exposes helpers to the client
   module Public
     def default_sqlite_version
-      return '3290000'
+      return '3300000'
     end
 
     def default_sqlite_directory

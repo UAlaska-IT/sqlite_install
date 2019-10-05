@@ -1,5 +1,10 @@
 # Changelog for SQLite Install Cookbook
 
+# 1.2.0
+
+* Improve idempotence of resource by sacrificing robustness of rebuild
+* Upgrade default SQLite
+
 ## 1.1.1
 
 * Fixed absolute default path

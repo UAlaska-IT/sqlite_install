@@ -11,7 +11,7 @@ git_url = 'https://github.com/ualaska-it/sqlite_install'
 source_url git_url if respond_to?(:source_url)
 issues_url "#{git_url}/issues" if respond_to?(:issues_url)
 
-version '1.1.1'
+version '1.2.0'
 
 supports 'ubuntu', '>= 16.0'
 supports 'debian', '>= 8.0'

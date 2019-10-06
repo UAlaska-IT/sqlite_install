@@ -4,22 +4,16 @@ include_recipe 'sqlite_install::default'
 
 sqlite_installation 'All Defaults'
 
-directory '/usr/local/sqlite-dl' do
-  user 'root'
-  group 'root'
-  mode 0o755
-end
-
-directory '/usr/local/sqlite-bld' do
-  user 'root'
-  group 'root'
-  mode 0o755
-end
-
-directory '/usr/local/sqlite' do
-  user 'root'
-  group 'root'
-  mode 0o755
+[
+  '/usr/local/sqlite-dl',
+  '/usr/local/sqlite-bld',
+  '/usr/local/sqlite'
+].each do |dir|
+  directory dir do
+    user 'root'
+    group 'root'
+    mode 0o755
+  end
 end
 
 user 'bud' do

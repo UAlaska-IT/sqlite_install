@@ -66,7 +66,7 @@ The release year of SQLite to install.
 Needed to build the download URL.
 * `version` - Defaults to `nil`.
 The version of SQLite to install.
-Note that SQLite uses a 'dotless' format, e.g. '3290000'.
+Note that SQLite uses a 'dotless' format, e.g. '3300000'.
 If nil, will default to the latest version when this cookbook was updated.
 The helper `default_sqlite_version` is provided for fetching this value.
 * `download_directory` - Defaults to `nil`.

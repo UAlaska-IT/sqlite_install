@@ -7,7 +7,7 @@ module SqliteInstall
   # This module exposes helpers to the client
   module Public
     def default_sqlite_version
-      return '3290000'
+      return '3300000'
     end
 
     def default_sqlite_directory
@@ -77,11 +77,11 @@ module SqliteInstall
       return 'make install'
     end
 
-    def post_install_logic(_new_resource)
-      # Call custom logic here
-    end
+    # For optional hooks and common install code see source_install cookbook
 
-    # For common install code see source_install cookbook
+    def config_creates_file(_new_resource)
+      return 'Makefile'
+    end
   end
 end
 
